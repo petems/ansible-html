@@ -6,17 +6,11 @@ import time
 import json
 from datetime import datetime
 
-TIME_FORMAT="%b %d %Y %H:%M:%S"
-MSG_FORMAT="%(now)s - %(category)s - %(data)s\n\n"
-
-today = datetime.date.today()
-todaystr = today.isoformat()
+datenow = datetime.now()
+datenow = datenow.strftime('%Y-%m-%d')
 
 if not os.path.exists("/var/log/ansible/hosts/html"):
     os.makedirs("/var/log/ansible/hosts/html")
-
-datenow = datetime.now()
-datenow = datenow.strftime('%Y-%m-%d')
 
 FIELDS = ['cmd', 'command', 'start', 'end', 'delta', 'msg', 'stdout', 'stderr']
 
