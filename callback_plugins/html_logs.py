@@ -3,12 +3,16 @@
 import os
 import time
 import json
+import datetime
 
 TIME_FORMAT="%b %d %Y %H:%M:%S"
 MSG_FORMAT="%(now)s - %(category)s - %(data)s\n\n"
 
-if not os.path.exists("/var/log/ansible/hosts"):
-    os.makedirs("/var/log/ansible/hosts")
+today = datetime.date.today()
+todaystr = today.isoformat()
+
+if not os.path.exists("/var/log/ansible/hosts/html"):
+    os.makedirs("/var/log/ansible/hosts/html")
 
 def log(host, category, data):
     if type(data) == dict:
@@ -22,10 +26,12 @@ def log(host, category, data):
             if invocation is not None:
                 data = json.dumps(invocation) + " => %s " % data
 
-    path = os.path.join("/var/log/ansible/hosts", host)
+    path = os.path.join("/var/log/ansible/hosts/html/"+host+todaystr+".html")
     now = time.strftime(TIME_FORMAT, time.localtime())
     fd = open(path, "a")
+
     fd.write(MSG_FORMAT % dict(now=now, category=category, data=data))
+
     fd.close()
 
 class CallbackModule(object):
